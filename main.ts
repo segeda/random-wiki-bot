@@ -13,11 +13,21 @@ await agent.login({
   identifier: Deno.env.get("BSKY_HANDLE"),
   password: Deno.env.get("BSKY_PASSWORD"),
 });
-const richText = new RichText({ text: `${jsonld.name} ${jsonld.url}` });
-await richText.detectFacets(agent);
+
+const richText = new RichText({ text: `${jsonld.name}\n${jsonld.url}` });
+await richText.detectFacets();
+
 await agent.post({
   text: richText.text,
   facets: richText.facets,
+  embed: {
+    $type: "app.bsky.embed.external",
+    external: {
+      uri: jsonld.url,
+      title: jsonld.name,
+      description: jsonld.headline ?? "",
+    },
+  },
 });
 
 console.log(`${jsonld.name} ${jsonld.url}`);
