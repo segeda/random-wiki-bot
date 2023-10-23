@@ -7,3 +7,5 @@ const script = document.querySelector('script[type="application/ld+json"]');
 const jsonld = JSON.parse(script.textContent);
 
 console.log(jsonld.url, jsonld.name);
+
+console.log(Deno.env.get("BSKY_HANDLE"));

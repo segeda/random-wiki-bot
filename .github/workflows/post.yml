@@ -10,5 +10,8 @@ jobs:
         with:
           deno-version: v1.x
       - uses: actions/checkout@main
-      - name: Send post
-        run: deno run --allow-net main.ts
+      - name: Send CS post
+        env:
+          BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
+          BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD_CS }}
+        run: deno run -allow-env --allow-net main.ts
