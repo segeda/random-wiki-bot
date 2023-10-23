@@ -8,4 +8,4 @@ const jsonld = JSON.parse(script.textContent);
 
 console.log(jsonld.url, jsonld.name);
 
-console.log(Deno.env.get("BSKY_HANDLE"));
+console.log("BSKY_HANDLE", Deno.env.get("BSKY_HANDLE"));
