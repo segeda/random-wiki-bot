@@ -1,0 +1,14 @@
+name: "Post to Bluesky"
+
+on: workflow_dispatch
+
+jobs:
+  post:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: denoland/setup-deno@main
+        with:
+          deno-version: v1.x
+      - uses: actions/checkout@main
+      - name: Send post
+        run: deno run --allow-net main.ts
