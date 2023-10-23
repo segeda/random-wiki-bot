@@ -17,7 +17,7 @@ await agent.login({
 const richText = new RichText({ text: `${jsonld.name}\n${jsonld.url}` });
 await richText.detectFacets();
 
-await agent.post({
+const post = {
   text: richText.text,
   facets: richText.facets,
   embed: {
@@ -28,6 +28,24 @@ await agent.post({
       description: jsonld.headline ?? "",
     },
   },
-});
+};
+
+if (jsonld.image) {
+  const image = await fetch(jsonld.image);
+  const encoding = image.headers.get("content-type");
+  const data = await image.arrayBuffer();
+  const blob = await agent.uploadBlob(data, { encoding });
+  const thumb = {
+    $type: "blob",
+    ref: {
+      $link: blob.data.blob.ref.toString(),
+    },
+    mimeType: blob.data.blob.mimeType,
+    size: blob.data.blob.size,
+  };
+  post.embed.external.thumb = thumb;
+}
+
+await agent.post(post);
 
 console.log(`${jsonld.name} ${jsonld.url}`);
