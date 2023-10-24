@@ -4,15 +4,21 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "0 8 * * *"
+env:
+  DENO_DIR: .deno-cache
 
 jobs:
   post:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@main
       - uses: denoland/setup-deno@main
         with:
           deno-version: v1.x
-      - uses: actions/checkout@main
+      - uses: actions/cache@main
+        with:
+          path: ${{ env.DENO_DIR }}
+          key: ${{ hashFiles('deno.lock') }}
       - name: Send CS post
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
