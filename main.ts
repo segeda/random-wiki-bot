@@ -1,4 +1,6 @@
 import { DOMParser } from "https://deno.land/x/deno_dom/deno-dom-wasm.ts";
+import { resize } from "https://deno.land/x/deno_image/mod.ts";
+
 import api from "npm:@atproto/api@0.6.20";
 const { BskyAgent, RichText } = api;
 
@@ -34,16 +36,17 @@ const post = {
 if (jsonld.image) {
   const image = await fetch(jsonld.image);
   const encoding = image.headers.get("content-type");
-  if (encoding.startsWith("image/")) {
+  if (encoding?.startsWith("image/")) {
     const data = await image.arrayBuffer();
-    const blob = await agent.uploadBlob(data, { encoding });
+    const resized = await resize(new Uint8Array(data), { width: 800 });
+    const uploaded = await agent.uploadBlob(resized, { encoding });
     const thumb = {
       $type: "blob",
       ref: {
-        $link: blob.data.blob.ref.toString(),
+        $link: uploaded.data.blob.ref.toString(),
       },
-      mimeType: blob.data.blob.mimeType,
-      size: blob.data.blob.size,
+      mimeType: uploaded.data.blob.mimeType,
+      size: uploaded.data.blob.size,
     };
     post.embed.external.thumb = thumb;
   }
