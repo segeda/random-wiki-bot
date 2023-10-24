@@ -7,6 +7,7 @@ const html = await resp.text();
 const document = new DOMParser().parseFromString(html, "text/html");
 const script = document.querySelector('script[type="application/ld+json"]');
 const jsonld = JSON.parse(script.textContent);
+console.log(jsonld);
 
 const agent = new BskyAgent({ service: "https://bsky.social" });
 await agent.login({
@@ -33,19 +34,20 @@ const post = {
 if (jsonld.image) {
   const image = await fetch(jsonld.image);
   const encoding = image.headers.get("content-type");
-  const data = await image.arrayBuffer();
-  const blob = await agent.uploadBlob(data, { encoding });
-  const thumb = {
-    $type: "blob",
-    ref: {
-      $link: blob.data.blob.ref.toString(),
-    },
-    mimeType: blob.data.blob.mimeType,
-    size: blob.data.blob.size,
-  };
-  post.embed.external.thumb = thumb;
+  if (encoding.startsWith("image/")) {
+    const data = await image.arrayBuffer();
+    const blob = await agent.uploadBlob(data, { encoding });
+    const thumb = {
+      $type: "blob",
+      ref: {
+        $link: blob.data.blob.ref.toString(),
+      },
+      mimeType: blob.data.blob.mimeType,
+      size: blob.data.blob.size,
+    };
+    post.embed.external.thumb = thumb;
+  }
 }
 
+console.log(post);
 await agent.post(post);
-
-console.log(`${jsonld.name} ${jsonld.url}`);
