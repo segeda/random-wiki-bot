@@ -18,7 +18,7 @@ jobs:
       - uses: actions/cache@main
         with:
           path: ${{ env.DENO_DIR }}
-          key: ${{ hashFiles('latest.txt') }}
+          key: ${{ hashFiles('.deno-cache/latest.txt') }}
       - name: Send CS post
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
