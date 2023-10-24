@@ -18,9 +18,9 @@ jobs:
       - uses: actions/cache@main
         with:
           path: ${{ env.DENO_DIR }}
-          key: ${{ hashFiles('.deno-cache/latest.txt') }}
+          key: ${{ hashFiles('deno.lock') }}
       - name: Send CS post
         env:
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD_CS }}
-        run: deno run --allow-env --allow-net main.ts
+        run: deno run --allow-env --allow-net --lock=deno.lock main.ts
