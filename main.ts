@@ -38,7 +38,7 @@ if (jsonld.image) {
   const encoding = image.headers.get("content-type");
   if (encoding?.startsWith("image/")) {
     const data = await image.arrayBuffer();
-    const resized = await resize(new Uint8Array(data), { width: 800 });
+    const resized = await resize(new Uint8Array(data), { width: 480 });
     const uploaded = await agent.uploadBlob(resized, { encoding });
     const thumb = {
       $type: "blob",
