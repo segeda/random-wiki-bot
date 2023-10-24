@@ -4,7 +4,7 @@ import { resize } from "https://deno.land/x/deno_image/mod.ts";
 import api from "npm:@atproto/api@0.6.20";
 const { BskyAgent, RichText } = api;
 
-const resp = await fetch("https://cs.wikipedia.org/wiki/Special:Random");
+const resp = await fetch(Deno.env.get("WIKI_RANDOM"));
 const html = await resp.text();
 const document = new DOMParser().parseFromString(html, "text/html");
 const script = document.querySelector('script[type="application/ld+json"]');
