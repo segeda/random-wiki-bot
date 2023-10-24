@@ -36,7 +36,7 @@ const post = {
 if (jsonld.image) {
   const image = await fetch(jsonld.image);
   const encoding = image.headers.get("content-type");
-  if (encoding?.startsWith("image/")) {
+  if (encoding?.startsWith("image/jpeg") || encoding?.startsWith("image/png")) {
     const data = await image.arrayBuffer();
     const resized = await resize(new Uint8Array(data), { width: 480 });
     const uploaded = await agent.uploadBlob(resized, { encoding });
