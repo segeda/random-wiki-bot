@@ -23,6 +23,7 @@ await richText.detectFacets();
 const post = {
   text: richText.text,
   facets: richText.facets,
+  langs: [Deno.env.get("WIKI_LANG")],
   embed: {
     $type: "app.bsky.embed.external",
     external: {

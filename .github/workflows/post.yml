@@ -21,7 +21,8 @@ jobs:
           key: ${{ hashFiles('deno.lock') }}
       - name: Send CS post
         env:
-          WIKI_RANDOM: ${{ secrets.WIKI_RANDOM_CS}}
+          WIKI_LANG: cs
+          WIKI_RANDOM: ${{ secrets.WIKI_RANDOM_CS }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD_CS }}
         run: deno run --allow-env --allow-net --lock=deno.lock main.ts
