@@ -35,23 +35,31 @@ const post = {
 };
 
 if (jsonld.image) {
-  const image = await fetch(jsonld.image);
-  const encoding = image.headers.get("content-type");
-  if (encoding?.startsWith("image/jpeg") || encoding?.startsWith("image/png")) {
-    const data = await image.arrayBuffer();
-    const resized = await resize(new Uint8Array(data), { width: 480 });
-    const uploaded = await agent.uploadBlob(resized, { encoding });
-    const thumb = {
-      $type: "blob",
-      ref: {
-        $link: uploaded.data.blob.ref.toString(),
-      },
-      mimeType: uploaded.data.blob.mimeType,
-      size: uploaded.data.blob.size,
-    };
-    post.embed.external.thumb = thumb;
+  try {
+    const image = await fetch(jsonld.image);
+    const encoding = image.headers.get("content-type");
+    if (
+      encoding?.startsWith("image/jpeg") ||
+      encoding?.startsWith("image/png")
+    ) {
+      const data = await image.arrayBuffer();
+      const resized = await resize(new Uint8Array(data), { width: 480 });
+      const uploaded = await agent.uploadBlob(resized, { encoding });
+      const thumb = {
+        $type: "blob",
+        ref: {
+          $link: uploaded.data.blob.ref.toString(),
+        },
+        mimeType: uploaded.data.blob.mimeType,
+        size: uploaded.data.blob.size,
+      };
+      post.embed.external.thumb = thumb;
+    }
+  } catch (e) {
+    console.log("Failed to upload image");
+    console.log(e);
   }
 }
 
-console.log(post);
 await agent.post(post);
+console.log(post);
