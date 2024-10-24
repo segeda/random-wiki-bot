@@ -25,4 +25,6 @@ jobs:
           WIKI_RANDOM: ${{ secrets.WIKI_RANDOM_CS }}
           BSKY_HANDLE: ${{ secrets.BSKY_HANDLE_CS }}
           BSKY_PASSWORD: ${{ secrets.BSKY_PASSWORD_CS }}
+          TELEGRAM_BOT_API_KEY: ${{ secrets.TELEGRAM_BOT_API_KEY }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
         run: deno run --allow-env --allow-net --lock=deno.lock main.ts

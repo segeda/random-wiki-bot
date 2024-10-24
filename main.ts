@@ -63,3 +63,7 @@ if (jsonld.image) {
 
 await agent.post(post);
 console.log(post);
+
+const text = `<a%20href="${jsonld.url}">${jsonld.name}</a>${jsonld.headline ? "%0A" + jsonld.headline : ""}`;
+const telegramResponse = await fetch(`https://api.telegram.org/bot${Deno.env.get("TELEGRAM_BOT_API_KEY")}/sendMessage?chat_id=${Deno.env.get("TELEGRAM_CHAT_ID")}&parse_mode=html&text=${text}`);
+console.log(await telegramResponse.json());
